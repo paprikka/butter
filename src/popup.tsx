@@ -2,7 +2,12 @@ import {render} from 'preact';
 
 
 const App = () => {
-    return <div>Hello World</div>;
+    return <div>
+        
+        <button onClick={
+            () => chrome.runtime.reload()
+        }>Reload</button>
+    </div>;
     };
 
 
