@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Sponsored Content Remover",
+  "version": "1.0.0",
+  "description": "Remove sponsored content from YouTube.",
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "permissions": ["activeTab", "storage", "scripting", "tabs"],
+  "host_permissions": ["https://www.youtube.com/*"],
+  "background": {
+    "service_worker": "./background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    },
+    "default_popup": "popup.html"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["/*"],
+      "matches": ["https://www.youtube.com/*"]
+    }
+  ]
+}
