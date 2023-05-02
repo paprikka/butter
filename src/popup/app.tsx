@@ -27,4 +27,4 @@ const App = () => {
   return null;
 };
 
-render(<App />, document.getElementById("root")!);
+export const mount = (el: HTMLElement) => render(<App />, el);
