@@ -1,15 +1,27 @@
 import { log } from "../log";
+import { SponsoredTimestamp, detectSponsoredContent } from "./detector";
+import { createPlayerControl } from "./player-control";
 
-type TranscriptLine = {
+export type TranscriptLine = {
   text: string;
-  offset: number;
-  duration: number;
+  offsetSeconds: number;
+  durationSeconds: number;
 };
 
-export const createWatcher = () => {
-  const start = (openAIAPIKey: string) => {
+export const createWatcher = ({
+  onTimestampsUpdate,
+  onSponsoredTimestampEnter,
+}: {
+  onTimestampsUpdate: (timestamps: SponsoredTimestamp[]) => void;
+  onSponsoredTimestampEnter: (timestamp: SponsoredTimestamp) => void;
+}) => {
+  let destroyPlayerControl: () => void = () => {};
+  const start = async (openAIAPIKey: string) => {
+    onTimestampsUpdate([]);
+    destroyPlayerControl();
+
     log("start", { openAIAPIKey });
-    const getTranscription = async () => {
+    const getTranscript = async () => {
       const videoID = new URL(location.href).searchParams.get("v");
 
       const transcript = await fetch(
@@ -22,10 +34,32 @@ export const createWatcher = () => {
         .then(({ transcript }) => transcript);
 
       log("transcript", transcript);
+
+      return transcript;
     };
 
-    getTranscription();
-    // const videoElement = document.querySelector('video');
+    const transcript = await getTranscript();
+
+    const sponsoredTimestamps = await detectSponsoredContent(
+      transcript,
+      openAIAPIKey
+    );
+
+    onTimestampsUpdate(sponsoredTimestamps);
+
+    log("sponsoredTimestamps", sponsoredTimestamps);
+
+    const videoElement = document.querySelector("video");
+    if (!videoElement) throw new Error("Cannot find video element");
+
+    destroyPlayerControl = createPlayerControl(
+      videoElement,
+      sponsoredTimestamps,
+      (timestamp) => {
+        log("onSponsoredTimestampEnter", timestamp);
+        onSponsoredTimestampEnter(timestamp);
+      }
+    );
   };
 
   return {

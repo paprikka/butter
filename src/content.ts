@@ -1,3 +1,4 @@
+import { createAudioNotifier } from "./audio-notifier";
 import { ClientState, makeStore } from "./client-state";
 import { BackgroundMessage, ClientMessage } from "./extension-message";
 import { log } from "./log";
@@ -19,7 +20,16 @@ chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener((message: BackgroundMessage) => {
     log(`Received message [${message.type}]`, { message });
 
-    const watcher = createWatcher();
+    const audioNotification = createAudioNotifier();
+
+    const watcher = createWatcher({
+      onTimestampsUpdate: (foundSponsoredTimestamps) => {
+        updateStoreAndNotify({ foundSponsoredTimestamps });
+      },
+      onSponsoredTimestampEnter: () => {
+        audioNotification.play();
+      },
+    });
 
     const sendMessage = (message: ClientMessage) => {
       port.postMessage(message);

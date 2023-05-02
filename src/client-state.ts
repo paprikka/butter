@@ -1,8 +1,11 @@
 import { TabStatus } from "./tab-status";
+import { SponsoredTimestamp } from "./watcher/detector";
 
 export type ClientState = {
   tabStatus: TabStatus;
   isBlockerEnabled: boolean;
+
+  foundSponsoredTimestamps: SponsoredTimestamp[];
 };
 
 export type ClientStore = {
@@ -14,6 +17,8 @@ export type ClientStore = {
 export const defaultState: ClientState = {
   tabStatus: "idle",
   isBlockerEnabled: false,
+
+  foundSponsoredTimestamps: [],
 };
 
 export const makeStore = (): ClientStore => ({

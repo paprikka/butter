@@ -74,6 +74,10 @@ export const ReadyView = ({ appState }: { appState: AppState }) => {
           enable
         </button>
       )}
+
+      <pre>
+        <code>{JSON.stringify(clientState.value, null, 2)}</code>
+      </pre>
     </div>
   );
 };
