@@ -2,7 +2,6 @@ import { createAudioNotifier } from "./audio-notifier";
 import { ClientState, makeStore } from "./client-state";
 import { BackgroundMessage, ClientMessage } from "./extension-message";
 import { log } from "./log";
-import { wait } from "./wait";
 import { createWatcher } from "./watcher";
 
 log("content script loaded");
@@ -50,17 +49,13 @@ chrome.runtime.onConnect.addListener((port) => {
     };
 
     if (message.type === "content:enable-blocker") {
-      wait(1000).then(() => {
-        updateStoreAndNotify({ isBlockerEnabled: true });
+      updateStoreAndNotify({ isBlockerEnabled: true });
 
-        watcher.start(message.openAIAPIKey);
-      });
+      watcher.start(message.openAIAPIKey);
     }
 
     if (message.type === "content:disable-blocker") {
-      wait(1000).then(() => {
-        updateStoreAndNotify({ isBlockerEnabled: false });
-      });
+      updateStoreAndNotify({ isBlockerEnabled: false });
     }
   });
 

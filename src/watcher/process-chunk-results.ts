@@ -1,4 +1,3 @@
-import { log } from "../log";
 import {
   ChunkResult,
   ChunkSponsoredFoundResult,

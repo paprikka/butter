@@ -6,6 +6,7 @@ export const createPlayerControl = (
   onSponsoredTimestampEnter: (segment: SponsoredTimestamp) => void
 ) => {
   if (!timestamps.length) return () => {};
+  let previousTimestamp: SponsoredTimestamp | null = null;
 
   const interval = setInterval(() => {
     const currentTime = el.currentTime;
@@ -14,11 +15,12 @@ export const createPlayerControl = (
       return currentTime >= startSeconds && currentTime <= endSeconds;
     });
 
-    if (currentTimestamp) {
+    if (currentTimestamp && previousTimestamp !== currentTimestamp) {
+      previousTimestamp = currentTimestamp;
       onSponsoredTimestampEnter(currentTimestamp);
       el.currentTime = currentTimestamp.endSeconds;
     }
-  }, 1000);
+  }, 500);
 
   return () => clearInterval(interval);
 };
