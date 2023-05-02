@@ -9,8 +9,10 @@ log("content script loaded");
 
 const store = makeStore();
 
+let isPortConnected = false;
 chrome.runtime.onConnect.addListener((port) => {
   log("Port connected");
+  isPortConnected = true;
 
   port.postMessage({
     type: "content:state:update",
@@ -32,6 +34,10 @@ chrome.runtime.onConnect.addListener((port) => {
     });
 
     const sendMessage = (message: ClientMessage) => {
+      if (!isPortConnected) {
+        log("Port disconnected, ignoring message", { message });
+        return;
+      }
       port.postMessage(message);
     };
 
@@ -46,6 +52,7 @@ chrome.runtime.onConnect.addListener((port) => {
     if (message.type === "content:enable-blocker") {
       wait(1000).then(() => {
         updateStoreAndNotify({ isBlockerEnabled: true });
+
         watcher.start(message.openAIAPIKey);
       });
     }
@@ -58,6 +65,7 @@ chrome.runtime.onConnect.addListener((port) => {
   });
 
   port.onDisconnect.addListener(() => {
+    isPortConnected = false;
     log("Port disconnected");
   });
 });
