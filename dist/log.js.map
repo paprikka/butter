@@ -1,0 +1,1 @@
+{"version":3,"file":"log.js","sources":["../src/log.ts"],"sourcesContent":["export const log = console.log.bind(console, \"[log]\");\n"],"names":["log","console","bind"],"mappings":"AAAO,MAAMA,EAAMC,QAAQD,IAAIE,KAAKD,QAAS,OAAO"}
