@@ -55,7 +55,10 @@ chrome.runtime.onConnect.addListener((port) => {
     }
 
     if (message.type === "content:disable-blocker") {
-      updateStoreAndNotify({ isBlockerEnabled: false });
+      // TODO: stop watcher instead of reloading the page
+
+      window.location.reload();
+      // updateStoreAndNotify({ isBlockerEnabled: false });
     }
   });
 

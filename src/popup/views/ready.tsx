@@ -54,11 +54,13 @@ export const ReadyView = ({ appState }: { appState: AppState }) => {
       </button>
       {clientState.value.isBlockerEnabled ? (
         <button
-          onClick={() =>
+          onClick={() => {
             sendMessage({
               type: "content:disable-blocker",
-            })
-          }
+            });
+
+            window.close();
+          }}
         >
           disable
         </button>
