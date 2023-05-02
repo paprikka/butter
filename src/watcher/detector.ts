@@ -1,6 +1,7 @@
 import { log } from "../log";
 import { TranscriptLine } from ".";
 import { retryPromiseWithDelay } from "../retry-with-delay";
+import { processChunkResults } from "./process-chunk-results";
 
 const round = (num: number) => Math.round(num * 100) / 100;
 const formatLine = (line: TranscriptLine) =>
@@ -47,20 +48,26 @@ const makeAnalyseChunkRequest = async (chunk: string, apiKey: string) => {
     });
 };
 
-type ChunkSponsoredFoundResult = {
+export type ChunkSponsoredFoundResult = {
   index: number;
   isSponsoredFound: true;
   startSeconds: number;
   endSeconds: number;
 };
-type ChunkSponsoredNotFoundResult = { index: number; isSponsoredFound: false };
+export type ChunkSponsoredNotFoundResult = {
+  index: number;
+  isSponsoredFound: false;
+};
 
+export type ChunkResult =
+  | ChunkSponsoredFoundResult
+  | ChunkSponsoredNotFoundResult;
 // Analyze each chunk and look for sponsored content mentions
 async function analyzeChunk(
   chunk: string,
   index: number,
   apiKey: string
-): Promise<ChunkSponsoredFoundResult | ChunkSponsoredNotFoundResult> {
+): Promise<ChunkResult> {
   const prompt = makePromptForChunk(chunk);
 
   const response = await makeAnalyseChunkRequest(prompt, apiKey);
@@ -150,22 +157,7 @@ export const detectSponsoredContent = async (
       );
     })
   ).then((results) => {
-    const isFound = (
-      chunkResult: ChunkSponsoredFoundResult | ChunkSponsoredNotFoundResult
-    ): chunkResult is ChunkSponsoredFoundResult => chunkResult.isSponsoredFound;
-
-    // TODO: merge overlapping/close chunks
-    const sponsoredTimestamps = results.filter(isFound).map((result) => {
-      return {
-        startSeconds: result.startSeconds,
-        endSeconds: result.endSeconds,
-      };
-    });
-
-    log("all chunks analyzed, results:", { results });
-    console.table(sponsoredTimestamps);
     console.timeEnd("analyzeChunk");
-
-    return sponsoredTimestamps;
+    return processChunkResults(results, 10, 10);
   });
 };
