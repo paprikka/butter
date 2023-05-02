@@ -65,6 +65,12 @@ export const createWatcher = ({
 
     createLocationObserver(() => {
       log("video changed, processing new page...");
+      const isVideoPlayerPage =
+        location.pathname === "/watch" &&
+        new URL(location.href).searchParams.get("v");
+
+      if (!isVideoPlayerPage) return log("not a video player page, skipping");
+
       processCurrentPage();
     });
   };
