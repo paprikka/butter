@@ -1,2 +1,1 @@
-export const log = (message: string, ...args: any[]) =>
-  console.log(`[log] ${message}`, ...args);
+export const log = console.log.bind(console, "[log]");

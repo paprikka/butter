@@ -32,7 +32,7 @@ export const createWatcher = ({
 
   const start = async (openAIAPIKey: string) => {
     const processCurrentPage = async () => {
-      log("processing current page", { openAIAPIKey });
+      log("processing current page");
 
       onTimestampsUpdate([]);
       destroyPlayerControl();
