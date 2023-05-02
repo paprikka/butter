@@ -1,4 +1,5 @@
 import { createAudioNotifier } from "./audio-notifier";
+import { triggerBadgeUpdate } from "./badge-notifier";
 import { ClientState, makeStore } from "./client-state";
 import { BackgroundMessage, ClientMessage } from "./extension-message";
 import { log } from "./log";
@@ -9,6 +10,16 @@ log("content script loaded");
 const store = makeStore();
 
 let isPortConnected = false;
+
+// TODO: drop that, use subs
+triggerBadgeUpdate(store.state, (message) => {
+  try {
+    chrome.runtime.sendMessage(message);
+  } catch (err) {
+    log("Failed to send message to background", { err });
+  }
+});
+
 chrome.runtime.onConnect.addListener((port) => {
   log("Port connected");
   isPortConnected = true;
@@ -41,10 +52,23 @@ chrome.runtime.onConnect.addListener((port) => {
     };
 
     const updateStoreAndNotify = (delta: Partial<ClientState>) => {
+      // TODO: replace with an observable
+
       store.set(delta);
-      sendMessage({
+      const message: ClientMessage = {
         type: "content:state:update",
         state: store.state,
+      };
+
+      sendMessage(message);
+
+      // !: hack, replace with an observable subscription
+      triggerBadgeUpdate(store.state, (message) => {
+        try {
+          chrome.runtime.sendMessage(message);
+        } catch (err) {
+          log("Failed to send message to background", { err });
+        }
       });
     };
 
