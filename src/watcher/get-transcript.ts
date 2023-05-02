@@ -5,7 +5,7 @@ export const getTranscript = async () => {
   const videoID = new URL(location.href).searchParams.get("v");
 
   const transcript = await fetch(
-    `http://localhost:3000/api/transcriptions?id=${videoID}`,
+    `https://butter-api-gamma.vercel.app/api/transcriptions?id=${videoID}`,
     {
       mode: "cors",
     }
