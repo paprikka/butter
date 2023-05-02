@@ -67,6 +67,7 @@ export const ReadyView = ({ appState }: { appState: AppState }) => {
           onClick={() =>
             sendMessage({
               type: "content:enable-blocker",
+              openAIAPIKey: appState.openAIAPIKey.value,
             })
           }
         >

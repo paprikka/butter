@@ -2,6 +2,7 @@ import { ClientState, makeStore } from "./client-state";
 import { BackgroundMessage, ClientMessage } from "./extension-message";
 import { log } from "./log";
 import { wait } from "./wait";
+import { createWatcher } from "./watcher";
 
 log("content script loaded");
 
@@ -18,6 +19,8 @@ chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener((message: BackgroundMessage) => {
     log(`Received message [${message.type}]`, { message });
 
+    const watcher = createWatcher();
+
     const sendMessage = (message: ClientMessage) => {
       port.postMessage(message);
     };
@@ -33,6 +36,7 @@ chrome.runtime.onConnect.addListener((port) => {
     if (message.type === "content:enable-blocker") {
       wait(1000).then(() => {
         updateStoreAndNotify({ isBlockerEnabled: true });
+        watcher.start(message.openAIAPIKey);
       });
     }
 

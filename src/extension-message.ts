@@ -8,6 +8,7 @@ export type ClientMessage = {
 export type BackgroundMessage =
   | {
       type: "content:enable-blocker";
+      openAIAPIKey: string;
     }
   | {
       type: "content:disable-blocker";
