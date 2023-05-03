@@ -1,7 +1,13 @@
 import { useSignal } from "@preact/signals";
-import { AppState } from "../state";
-import styles from "./missing-api-key.module.css";
 import { wait } from "../../wait";
+import { Alert } from "../components/alert";
+import { Button } from "../components/button";
+import { HGroup, VGroup } from "../components/layout";
+import { Overlay } from "../components/overlay";
+import { PageContainer } from "../components/page-container";
+import { Spacer } from "../components/spacer";
+import { TextInput } from "../components/text-input";
+import { AppState } from "../state";
 
 const checkAPIKey = async (apiKey: string) => {
   await wait(1000);
@@ -21,73 +27,82 @@ export const MissingAPIKeyView = ({ appState }: { appState: AppState }) => {
   );
 
   return (
-    <div>
-      {isChecking.value ? (
-        <div className={styles.overlay}>loading...</div>
-      ) : null}
+    <PageContainer>
+      <Overlay isVisible={isChecking.value}>
+        <p>Checking status...</p>
+      </Overlay>
 
       <h1>Missing API key</h1>
       <p>OpenAI API key is missing. Please enter it below.</p>
-      <input
-        type="text"
-        value={currentAPIKey.value}
-        onInput={(e) => {
-          apiKeyCheckStatus.value = "unknown";
-          currentAPIKey.value = e.currentTarget.value;
-        }}
-      />
-      <button
-        disabled={currentAPIKey.value.length < 5}
-        onClick={() => {
-          appState.openAIAPIKey.value = currentAPIKey.value;
-          chrome.storage.local.set(
-            { openAIAPIKey: currentAPIKey.value },
-            () => {
-              appState.step.value = "ready";
-            }
-          );
-        }}
-      >
-        Save
-      </button>
-
-      <button
-        onClick={() => {
-          isChecking.value = true;
-          checkAPIKey(currentAPIKey.value).then((isOK) => {
-            isChecking.value = false;
-            apiKeyCheckStatus.value = isOK ? "valid" : "invalid";
-          });
-        }}
-      >
-        check
-      </button>
-
-      <button
-        onClick={() => {
-          chrome.storage.local.clear().then(() => {
-            appState.openAIAPIKey.value = "";
-            appState.step.value = "loading";
-          });
-        }}
-      >
-        clear my data
-      </button>
-
-      {appState.openAIAPIKey.value ? (
-        <button
-          onClick={() => {
-            appState.step.value = "ready";
+      <VGroup>
+        <TextInput
+          placeholder="sk-..."
+          value={currentAPIKey.value}
+          onChange={(newKey) => {
+            apiKeyCheckStatus.value = "unknown";
+            currentAPIKey.value = newKey;
           }}
-        >
-          back
-        </button>
-      ) : null}
-      {apiKeyCheckStatus.value === "valid" ? <div>API key is valid</div> : null}
+        />
+        <HGroup>
+          <Button
+            level="primary"
+            disabled={currentAPIKey.value.length < 5}
+            onClick={() => {
+              appState.openAIAPIKey.value = currentAPIKey.value;
+              chrome.storage.local.set(
+                { openAIAPIKey: currentAPIKey.value },
+                () => {
+                  appState.step.value = "ready";
+                }
+              );
+            }}
+          >
+            Save
+          </Button>
 
-      {apiKeyCheckStatus.value === "invalid" ? (
-        <div>API key is invalid</div>
-      ) : null}
-    </div>
+          <Button
+            onClick={() => {
+              isChecking.value = true;
+              checkAPIKey(currentAPIKey.value).then((isOK) => {
+                isChecking.value = false;
+                apiKeyCheckStatus.value = isOK ? "valid" : "invalid";
+              });
+            }}
+          >
+            Check
+          </Button>
+
+          <Button
+            onClick={() => {
+              chrome.storage.local.clear().then(() => {
+                appState.openAIAPIKey.value = "";
+                appState.step.value = "loading";
+              });
+            }}
+          >
+            Clear my data
+          </Button>
+          <Spacer />
+          {appState.openAIAPIKey.value ? (
+            <Button
+              onClick={() => {
+                appState.step.value = "ready";
+              }}
+            >
+              Back
+            </Button>
+          ) : null}
+        </HGroup>
+        <VGroup>
+          {apiKeyCheckStatus.value === "valid" ? (
+            <Alert level="success">API key is valid</Alert>
+          ) : null}
+
+          {apiKeyCheckStatus.value === "invalid" ? (
+            <Alert level="error">API key is invalid</Alert>
+          ) : null}
+        </VGroup>
+      </VGroup>
+    </PageContainer>
   );
 };

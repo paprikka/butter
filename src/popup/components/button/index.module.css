@@ -1,0 +1,46 @@
+.main {
+  appearance: none;
+  font-size: 0.75rem;
+  padding: 0 1rem;
+  font-family: inherit;
+  border: none;
+  line-height: 2rem;
+  font-weight: bold;
+  margin: 0;
+  border-radius: 100rem;
+
+  transition: 0.2s scale;
+  cursor: pointer;
+}
+
+.main[disabled] {
+  pointer-events: none;
+}
+
+.main:active {
+  scale: 0.96;
+}
+
+.isDefault {
+  color: var(--color-text);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.isDefault:hover {
+  color: var(--color-bg);
+  background: var(--color-text);
+}
+
+.isPrimary {
+  color: var(--color-text);
+  background: var(--color-primary);
+}
+
+.isPrimary:hover {
+  color: var(--color-primary);
+  background: var(--color-text);
+}
+
+.isPrimary[disabled] {
+  opacity: 0.5;
+}

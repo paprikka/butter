@@ -1,0 +1,74 @@
+.main {
+  --m: 0.2rem;
+  --h: 2rem;
+
+  appearance: none;
+  font-size: 0.75rem;
+  padding: 0;
+  font-family: inherit;
+  border: none;
+  line-height: var(--h);
+  font-weight: bold;
+  margin: 0;
+  border-radius: 100rem;
+
+  transition: 0.2s scale;
+  cursor: pointer;
+  position: relative;
+  height: var(--h);
+  width: calc(var(--h) * 2);
+  overflow: hidden;
+  transition: 0.2s background;
+}
+.main[disabled] {
+  pointer-events: none;
+}
+
+.isOff {
+  background: var(--color-danger);
+}
+
+.isOn {
+  background: var(--color-success);
+}
+
+.main::before,
+.main::after {
+  display: block;
+  position: absolute;
+  top: var(--m);
+  background: #fff;
+  width: calc(var(--h) - 2 * var(--m));
+  height: calc(var(--h) - 2 * var(--m));
+  border-radius: 1000rem;
+  line-height: calc(var(--h) - 2 * var(--m));
+  transition: 0.3s translate;
+}
+
+.main::before {
+  content: "on";
+  left: var(--m);
+  color: var(--color-success);
+}
+
+.isOff::before {
+  translate: calc(-100% - var(--h)) 0;
+}
+
+.inOn::before {
+  translate: 0 0;
+}
+
+.main::after {
+  content: "off";
+  right: var(--m);
+  color: var(--color-danger);
+}
+
+.isOff::after {
+  translate: 0 0;
+}
+
+.isOn::after {
+  translate: calc(100% + var(--h)) 0;
+}

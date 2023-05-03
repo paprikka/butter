@@ -1,6 +1,7 @@
 import { signal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 import { AppState } from "../state";
+import { PageContainer } from "../components/page-container";
 
 export const LoadingView = ({ appState }: { appState: AppState }) => {
   const s = signal(1);
@@ -27,6 +28,6 @@ export const LoadingView = ({ appState }: { appState: AppState }) => {
       appState.step.value = "missing-api-key";
     });
   }, []);
-  //asd
-  return <div>Loading...{s.value}</div>;
+
+  return <PageContainer isPadded>Loading...</PageContainer>;
 };

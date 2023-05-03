@@ -1,0 +1,29 @@
+.main {
+}
+
+.topNav,
+.bottomNav {
+  padding: 1rem;
+}
+
+.topNav {
+  border-bottom: 1px solid var(--color-section-border);
+}
+
+.bottomNav {
+  border-top: 1px solid var(--color-section-border);
+}
+
+.inactive {
+  min-height: 4rem;
+  display: grid;
+  place-items: center;
+}
+
+.section {
+  padding-inline: var(--page-margin);
+}
+
+.section summary {
+  cursor: pointer;
+}

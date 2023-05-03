@@ -1,0 +1,14 @@
+.vgroup {
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  gap: 1rem;
+}
+
+.hgroup {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0.5rem;
+}

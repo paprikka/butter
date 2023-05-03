@@ -1,0 +1,20 @@
+.main {
+  appearance: none;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem;
+  line-height: inherit;
+
+  border: 2px rgba(0, 0, 0, 0.2) solid;
+  border-radius: 0.5rem;
+  color: var(--color-text);
+}
+
+.main::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.main:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
