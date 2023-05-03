@@ -17,6 +17,12 @@ const clientState = signal<ClientState>({ ...defaultState });
 
 const port = signal<chrome.runtime.Port | null>(null);
 
+const formatSeconds = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+
+  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+};
 export const ReadyView = ({ appState }: { appState: AppState }) => {
   useEffect(() => {
     log({ appState });
@@ -113,15 +119,17 @@ export const ReadyView = ({ appState }: { appState: AppState }) => {
               sponsored segments
             </summary>
 
-            <ul>
+            <ol class={styles.timings}>
               {clientState.value.foundSponsoredTimestamps.map(
                 (timestamp, ind) => (
                   <li key={ind}>
-                    {timestamp.startSeconds} - {timestamp.endSeconds}
+                    <time>{formatSeconds(timestamp.startSeconds)}</time>
+                    <span class={styles.timingsSeparator} />
+                    <time>{formatSeconds(timestamp.endSeconds)}</time>
                   </li>
                 )
               )}
-            </ul>
+            </ol>
           </details>
         ) : null}
 

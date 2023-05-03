@@ -27,3 +27,26 @@
 .section summary {
   cursor: pointer;
 }
+
+.timings {
+  margin: 0 0 0 0.75rem;
+  padding: 0;
+}
+
+.timings li {
+  padding: 0.5rem 0;
+}
+
+.timings time {
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+.timingsSeparator {
+  opacity: 0.5;
+  padding-inline: 0.25rem;
+}
+
+.timingsSeparator::after {
+  content: "...";
+}
