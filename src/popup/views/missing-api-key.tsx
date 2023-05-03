@@ -32,7 +32,7 @@ export const MissingAPIKeyView = ({ appState }: { appState: AppState }) => {
         <p>Checking status...</p>
       </Overlay>
 
-      <h1>Missing API key</h1>
+      <h1>Settings</h1>
       <p>OpenAI API key is missing. Please enter it below.</p>
       <VGroup>
         <TextInput

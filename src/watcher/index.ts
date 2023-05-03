@@ -23,10 +23,16 @@ const createLocationObserver = (callback: () => void) => {
 
 export const createWatcher = ({
   onTimestampsUpdate,
+  onProcessingStart,
+  onProcessingError,
+  onProcessingComplete,
   onSponsoredTimestampEnter,
 }: {
   onTimestampsUpdate: (timestamps: SponsoredTimestamp[]) => void;
   onSponsoredTimestampEnter: (timestamp: SponsoredTimestamp) => void;
+  onProcessingStart: () => void;
+  onProcessingError: (error: Error) => void;
+  onProcessingComplete: () => void;
 }) => {
   let destroyPlayerControl: () => void = () => {};
 
@@ -61,7 +67,10 @@ export const createWatcher = ({
       );
     };
 
-    await processCurrentPage();
+    onProcessingStart();
+    await processCurrentPage()
+      .then(onProcessingComplete)
+      .catch(onProcessingError);
 
     createLocationObserver(() => {
       log("video changed, processing new page...");
@@ -71,7 +80,8 @@ export const createWatcher = ({
 
       if (!isVideoPlayerPage) return log("not a video player page, skipping");
 
-      processCurrentPage();
+      onProcessingStart();
+      processCurrentPage().then(onProcessingComplete).catch(onProcessingError);
     });
   };
 

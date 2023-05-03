@@ -11,6 +11,7 @@ import { AppState } from "../state";
 import styles from "./ready.module.css";
 import { PageContainer } from "../components/page-container";
 import { Overlay } from "../components/overlay";
+import { Alert } from "../components/alert";
 
 const clientState = signal<ClientState>({ ...defaultState });
 
@@ -99,35 +100,62 @@ export const ReadyView = ({ appState }: { appState: AppState }) => {
             </Button>
           </HGroup>
         </header>
-        {clientState.value.isBlockerEnabled ? (
-          <div class={styles.result}>
-            {clientState.value.foundSponsoredTimestamps?.length ? (
-              <details class={styles.section}>
-                <summary>
-                  Found{" "}
-                  <strong>
-                    {clientState.value.foundSponsoredTimestamps.length}
-                  </strong>{" "}
-                  sponsored segments
-                </summary>
 
-                <ul>
-                  {clientState.value.foundSponsoredTimestamps.map(
-                    (timestamp, ind) => (
-                      <li key={ind}>
-                        {timestamp.startSeconds} - {timestamp.endSeconds}
-                      </li>
-                    )
-                  )}
-                </ul>
-              </details>
-            ) : (
-              "No sponsored timestamps found"
-            )}
+        {clientState.value.isBlockerEnabled &&
+        clientState.value.tabStatus === "idle" &&
+        clientState.value.foundSponsoredTimestamps?.length ? (
+          <details class={styles.section}>
+            <summary>
+              Found{" "}
+              <strong>
+                {clientState.value.foundSponsoredTimestamps.length}
+              </strong>{" "}
+              sponsored segments
+            </summary>
+
+            <ul>
+              {clientState.value.foundSponsoredTimestamps.map(
+                (timestamp, ind) => (
+                  <li key={ind}>
+                    {timestamp.startSeconds} - {timestamp.endSeconds}
+                  </li>
+                )
+              )}
+            </ul>
+          </details>
+        ) : null}
+
+        {clientState.value.isBlockerEnabled &&
+        clientState.value.tabStatus === "idle" &&
+        !clientState.value.foundSponsoredTimestamps?.length ? (
+          <div class={styles.section}>
+            <Alert>No sponsored content found.</Alert>
           </div>
-        ) : (
-          <div class={styles.inactive}>Plugin in not active in this tab</div>
-        )}
+        ) : null}
+
+        {!clientState.value.isBlockerEnabled ? (
+          <div class={styles.inactive}>
+            <p>The extension is not active in this tab</p>
+            <Button level="primary" onClick={() => handleToggleClick(true)}>
+              Spread that shit
+            </Button>
+          </div>
+        ) : null}
+
+        {clientState.value.tabStatus === "error" ? (
+          <div class={styles.section}>
+            <Alert level="error">
+              Unrecognised error, try refreshing the page
+            </Alert>
+          </div>
+        ) : null}
+
+        {clientState.value.tabStatus === "processing" ? (
+          <div class={styles.section}>
+            <Alert>Processing video...</Alert>
+          </div>
+        ) : null}
+
         <footer class={styles.bottomNav}>
           <HGroup>
             <Spacer />

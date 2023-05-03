@@ -41,6 +41,16 @@ chrome.runtime.onConnect.addListener((port) => {
       onSponsoredTimestampEnter: () => {
         audioNotification.play();
       },
+      onProcessingStart: () => {
+        updateStoreAndNotify({ tabStatus: "processing" });
+      },
+      onProcessingError: (error) => {
+        // TODO: handle error, publish error state
+        log("Processing error", { error });
+      },
+      onProcessingComplete: () => {
+        updateStoreAndNotify({ tabStatus: "idle" });
+      },
     });
 
     const sendMessage = (message: ClientMessage) => {
