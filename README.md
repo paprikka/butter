@@ -1,4 +1,4 @@
-# [Butter](https://butter.sonnet.io)
+# [🧈 Butter](https://butter.sonnet.io)
 
 > This repository contains the source code and the unpacked version of [Butter](https://butter.sonnet.io) - the sponsored content blocker browser extension.
 
