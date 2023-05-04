@@ -1,6 +1,6 @@
 import { log } from "./log";
 
-export const initAutoUpdater = () => {
+export const initAutoUpdater = (useSoftReload = false) => {
   log("initAutoUpdater");
   const loop = async () => {
     const currentTS = await fetch("./.timestamp").then((_) => _.json());
@@ -14,7 +14,11 @@ export const initAutoUpdater = () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
         log(`new update found! ${new Date(currentTS)} -> ${new Date(newTS)}`);
-        chrome.runtime.reload();
+        if (useSoftReload) {
+          window.location.reload();
+        } else {
+          chrome.runtime.reload();
+        }
         return;
       }
     }
