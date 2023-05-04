@@ -33,7 +33,16 @@ export const MissingAPIKeyView = ({ appState }: { appState: AppState }) => {
       </Overlay>
 
       <h1>Settings</h1>
-      <p>OpenAI API key is missing. Please enter it below.</p>
+      <p>
+        OpenAI API key is missing. <br /> You can get one{" "}
+        <a
+          href="https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key"
+          target="_blank"
+        >
+          here
+        </a>
+        .
+      </p>
       <VGroup>
         <TextInput
           placeholder="sk-..."
