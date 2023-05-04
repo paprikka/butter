@@ -19,11 +19,14 @@ ${chunk}
 
 == video transcript chunk end ==
 
+The video transcript can contain sponsored segments.
+Sponsored segments often start with phrases such as "I want to thank our sponsor" or "this video is sponsored by"
+
 Answer the following questions in JSON format:
 
 1. Does this transcript contain sponsored content?
-2. If so, at what time does the sponsored content start?
-3. If so, at what time does the sponsored content end?
+2. If so, when does the sponsored content start?
+3. If so, when does the sponsored content end?
 
 Reply in this format (JSON): 
 { "isSponsoredFound": boolean, startSeconds: number, endSeconds: number }
@@ -158,6 +161,6 @@ export const detectSponsoredContent = async (
     })
   ).then((results) => {
     console.timeEnd("analyzeChunk");
-    return processChunkResults(results, 10, 10);
+    return processChunkResults(results, 30, 70);
   });
 };
