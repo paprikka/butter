@@ -20,6 +20,10 @@ export const createPlayerControl = (
       onSponsoredTimestampEnter(currentTimestamp);
       el.currentTime = currentTimestamp.endSeconds;
     }
+
+    if (!currentTimestamp && previousTimestamp) {
+      previousTimestamp = null;
+    }
   }, 500);
 
   return () => clearInterval(interval);
