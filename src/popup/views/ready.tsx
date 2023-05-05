@@ -167,10 +167,10 @@ export const ReadyView = ({ appState }: { appState: AppState }) => {
         <footer class={styles.bottomNav}>
           <HGroup>
             <Spacer />
-            <a href="./first-run.html" target="_blank">
+            <a href="https://butter.sonnet.io" target="_blank">
               About
             </a>
-            <a href="https://sonnet.io" target="_blank">
+            <a href="https://sonnet.io/" target="_blank">
               Feedback
             </a>
           </HGroup>
