@@ -34,7 +34,7 @@ export const MissingAPIKeyView = ({ appState }: { appState: AppState }) => {
 
       <h1>Settings</h1>
       <p>
-        OpenAI API key is missing. <br /> You can get one{" "}
+        Add an OpenAI API key to use the extension. <br /> You can get one{" "}
         <a
           href="https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key"
           target="_blank"

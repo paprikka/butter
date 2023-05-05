@@ -145,7 +145,7 @@ export const ReadyView = ({ appState }: { appState: AppState }) => {
           <div class={styles.inactive}>
             <p>The extension is not active in this tab</p>
             <Button level="primary" onClick={() => handleToggleClick(true)}>
-              Spread that shit
+              Enable for this page
             </Button>
           </div>
         ) : null}
