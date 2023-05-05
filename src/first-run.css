@@ -60,7 +60,7 @@ h2 {
 }
 
 article img {
-  max-width: 100%;
+  max-width: 80%;
   height: auto;
 }
 
@@ -78,6 +78,10 @@ footer {
 
 a {
   color: var(--color-link);
+}
+
+a:hover {
+  text-decoration: none;
 }
 
 mark {
