@@ -26,6 +26,7 @@
   "content_scripts": [
     {
       "js": ["./content-loader.js"],
+      "css": ["./content.css"],
       "module": true,
       "matches": ["https://www.youtube.com/*"]
     }

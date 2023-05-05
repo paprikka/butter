@@ -1,3 +1,5 @@
+import { registerDebugTool } from "./debug-tools";
+
 export const createAudioNotifier = () => {
   const audioPlayer = new Audio();
   audioPlayer.src = chrome.runtime.getURL("found.mp3");
@@ -10,3 +12,5 @@ export const createAudioNotifier = () => {
     },
   };
 };
+
+registerDebugTool({ createAudioNotifier });

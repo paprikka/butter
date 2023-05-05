@@ -2,6 +2,7 @@ import { createAudioNotifier } from "./audio-notifier";
 import { triggerBadgeUpdate } from "./badge-notifier";
 import { ClientState, makeStore } from "./client-state";
 import { BackgroundMessage, ClientMessage } from "./extension-message";
+import { createFXNotifier } from "./fx-notifier";
 import { log } from "./log";
 import { createWatcher } from "./watcher";
 
@@ -33,13 +34,16 @@ chrome.runtime.onConnect.addListener((port) => {
     log(`Received message [${message.type}]`, { message });
 
     const audioNotification = createAudioNotifier();
+    const fxNotification = createFXNotifier();
 
     const watcher = createWatcher({
       onTimestampsUpdate: (foundSponsoredTimestamps) => {
         updateStoreAndNotify({ foundSponsoredTimestamps });
       },
       onSponsoredTimestampEnter: () => {
+        log("Sponsored timestamp enter");
         audioNotification.play();
+        fxNotification.trigger();
       },
       onProcessingStart: () => {
         updateStoreAndNotify({ tabStatus: "processing" });
